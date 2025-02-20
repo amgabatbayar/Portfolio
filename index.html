@@ -74,7 +74,93 @@
             <p><strong>Opis:</strong> Analiza sprzedaży produktów w sklepie internetowym.</p>
             
             <div class="code-box">
-                <div class="code-header" onclick="toggleCode(this)">▶ Kod SQL: Analiza sprzedaży</div>
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <pre class="code-content">
+CREATE TEMPORARY TABLE tmp_main(
+    Invoice_id TEXT,
+    Branch TEXT,
+    City TEXT,
+    Customer_type TEXT,
+    Gender TEXT,
+    Product_line TEXT,
+    Unit_price TEXT,
+    Quantity TEXT,
+    Tax5 TEXT,
+    Total TEXT,
+    Date TEXT,
+    Time TEXT,
+    Payment TEXT,
+    cogs TEXT,
+    gross_margin_percent TEXT,
+    gross_income TEXT,
+    Rating TEXT
+);
+
+COPY tmp_main FROM 'C:\Users\marcb\Desktop\archive\supermarket_sales.csv' DELIMITER ',' CSV HEADER;
+
+CREATE TABLE main (
+    Inv_id text,
+    Branch TEXT,
+    City TEXT,
+    Custtype TEXT,
+    Gender TEXT,
+    Prod_line TEXT,
+    Unit_price float,
+    Quantity smallint,
+    Tax5 float,
+    Total float,
+    trans_date DATE,
+    Time TIME,
+    Payment TEXT,
+    cogs FLOAT,
+    gross_margin_percent FLOAT,
+    gross_income FLOAT,
+    Rating FLOAT
+);
+
+INSERT INTO main(
+    Inv_id,
+    Branch,
+    City,
+    Custtype,
+    Gender,
+    Prod_line,
+    Unit_price,
+    Quantity,
+    Tax5,
+    Total,
+    trans_date,
+    Time,
+    Payment,
+    cogs,
+    gross_margin_percent,
+    gross_income,
+    Rating
+)
+SELECT
+    Invoice_id,
+    Branch,
+    City,
+    Customer_type,
+    Gender,
+    Product_line,
+    Unit_price::FLOAT,
+    Quantity::SMALLINT,
+    Tax5::FLOAT,
+    Total::FLOAT,
+    TO_DATE(Date, 'MM-DD-YYYY'),
+    Time::TIME,
+    Payment,
+    cogs::FLOAT,
+    gross_margin_percent::FLOAT,
+    gross_income::FLOAT,
+    Rating::FLOAT
+
+                </pre>
+                </div>
+            
+                <div class="code-box">
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
                 <pre class="code-content">
 SELECT product_name, SUM(quantity) AS total_sold 
 FROM sales 
@@ -82,7 +168,46 @@ GROUP BY product_name
 ORDER BY total_sold DESC;
                 </pre>
             </div>
-            
+
+                <div class="code-box">
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <pre class="code-content">
+SELECT product_name, SUM(quantity) AS total_sold 
+FROM sales 
+GROUP BY product_name 
+ORDER BY total_sold DESC;
+                </pre>
+                </div>
+
+                <div class="code-box">
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <pre class="code-content">
+SELECT product_name, SUM(quantity) AS total_sold 
+FROM sales 
+GROUP BY product_name 
+ORDER BY total_sold DESC;
+                </pre>
+                </div>
+
+                <div class="code-box">
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <pre class="code-content">
+SELECT product_name, SUM(quantity) AS total_sold 
+FROM sales 
+GROUP BY product_name 
+ORDER BY total_sold DESC;
+                </pre>
+                </div>
+
+                <div class="code-box">
+                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <pre class="code-content">
+SELECT product_name, SUM(quantity) AS total_sold 
+FROM sales 
+GROUP BY product_name 
+ORDER BY total_sold DESC;
+                </pre>
+                </div>
             <h3>Wyniki:</h3>
             <table class="result-table">
                 <tr>
