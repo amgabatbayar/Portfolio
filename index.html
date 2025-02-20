@@ -164,13 +164,36 @@ SELECT
                 <div class="code-box">
                 <div class="code-header" onclick="toggleCode(this)">▶ Kod</div>
                 <pre class="code-content">
+----- Analiza sprzedaży
+
+---  Jaka jest średnia wartość transakcji dla każdego oddziału?
+        SELECT Branch, avg(total) AS srednia
+        from main
+        GROUP BY Branch;
+
+---  Która linia produktów (Product_line) generuje największy przychód?
+SELECT Prod_line, sum(Total) AS total
+FROM main
+GROUP BY Prod_line
+ORDER BY total DESC;
+
+--- Jakie jest 5 najlepiej sprzedających się produktów pod względem liczby sprzedanych sztuk?
+
+SELECT Prod_line,
+       SUM(Quantity) as ile
+FROM main
+GROUP BY Prod_line
+ORDER BY ile DESC
+LIMIT 5;
+
+---  Jakie są miesięczne przychody z podziałem na oddziały i miasta
 WITH CTE AS (
 SELECT EXTRACT(MONTH from trans_date) as miesiac,
        City,
        Branch,
        Total
 FROM main
-             )
+)
 SELECT City,
        Branch,
        miesiac,
@@ -178,6 +201,17 @@ SELECT City,
 FROM CTE
 GROUP BY Branch, city, miesiac
 ORDER BY city, Branch, miesiac
+
+--- Jakie są najpopularniejsze metody płatności?
+SELECT Payment,
+       count(*) AS ile
+FROM main
+GROUP BY Payment
+-- Jaki jest średni koszt własny sprzedaży dla każdej linii produktów?
+SELECT Prod_line,
+       ROUND(AVG(cogs)::NUMERIC,2) AS sredni_koszt
+FROM main
+GROUP BY Prod_line
                 </pre>
             </div>
 
