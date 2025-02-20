@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moje Portfolio SQL</title>
+    <title>Portfolio SQL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,11 +67,11 @@
     </style>
 </head>
 <body>
-    <header>Moje Portfolio SQL</header>
+    <header>Portfolio SQL</header>
     <div class="container">
         <div class="sql-project">
-            <h2>Projekt 1: Analiza Sprzedaży</h2>
-            <p><strong>Opis:</strong> Analiza sprzedaży produktów w sklepie internetowym.</p>
+            <h2>Projekt 1: Supermarket Sales </h2>
+            <p><strong>Link:</strong> https://www.kaggle.com/code/fareedalianwar/supermarket-sales</p>
             
             <div class="code-box">
                 <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
@@ -158,14 +158,26 @@ SELECT
 
                 </pre>
                 </div>
+            <h2>Analiza sprzedaży</h2>
+            <p><strong>Zastosowano:</strong> CTE, GROUP BY</p>
             
                 <div class="code-box">
                 <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
                 <pre class="code-content">
-SELECT product_name, SUM(quantity) AS total_sold 
-FROM sales 
-GROUP BY product_name 
-ORDER BY total_sold DESC;
+WITH CTE AS (
+SELECT EXTRACT(MONTH from trans_date) as miesiac,
+       City,
+       Branch,
+       Total
+FROM main
+             )
+SELECT City,
+       Branch,
+       miesiac,
+       ROUND(SUM(Total)::NUMERIC,2) as wartosc
+FROM CTE
+GROUP BY Branch, city, miesiac
+ORDER BY city, Branch, miesiac
                 </pre>
             </div>
 
