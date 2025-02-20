@@ -4,9 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moje Portfolio SQL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .sql-project {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        pre {
+            background: #272822;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .result-table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Witaj na mojej stronie!</h1>
-    <p>To moje portfolio SQL.</p>
+    <header>Moje Portfolio SQL</header>
+    <div class="container">
+        <div class="sql-project">
+            <h2>Projekt 1: Analiza Sprzedaży</h2>
+            <p><strong>Opis:</strong> Analiza sprzedaży produktów w sklepie internetowym.</p>
+            <pre>
+SELECT product_name, SUM(quantity) AS total_sold 
+FROM sales 
+GROUP BY product_name 
+ORDER BY total_sold DESC;
+            </pre>
+            <h3>Wyniki:</h3>
+            <table class="result-table">
+                <tr>
+                    <th>Produkt</th>
+                    <th>Sprzedana Ilość</th>
+                </tr>
+                <tr>
+                    <td>Telefon</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>Laptop</td>
+                    <td>95</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
 </html>
