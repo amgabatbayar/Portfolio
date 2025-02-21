@@ -172,14 +172,14 @@ SELECT
         from main
         GROUP BY Branch;
 
-2.  Która linia produktów (Product_line) generuje największy przychód?
+<p>2.  Która linia produktów (Product_line) generuje największy przychód?</p>
                     
 SELECT Prod_line, sum(Total) AS total
 FROM main
 GROUP BY Prod_line
 ORDER BY total DESC;
 
-3. Jakie jest 5 najlepiej sprzedających się produktów pod względem liczby sprzedanych sztuk?
+<p>3. Jakie jest 5 najlepiej sprzedających się produktów pod względem liczby sprzedanych sztuk?</p>
 
 SELECT Prod_line,
        SUM(Quantity) as ile
@@ -188,7 +188,7 @@ GROUP BY Prod_line
 ORDER BY ile DESC
 LIMIT 5;
 
-3.  Jakie są miesięczne przychody z podziałem na oddziały i miasta
+<p>3.  Jakie są miesięczne przychody z podziałem na oddziały i miasta</p>
                     
 WITH CTE AS (
 SELECT EXTRACT(MONTH from trans_date) as miesiac,
@@ -205,14 +205,14 @@ FROM CTE
 GROUP BY Branch, city, miesiac
 ORDER BY city, Branch, miesiac
 
-4. Jakie są najpopularniejsze metody płatności?
+<p>4. Jakie są najpopularniejsze metody płatności?</p>
                     
 SELECT Payment,
        count(*) AS ile
 FROM main
 GROUP BY Payment
                     
-5. Jaki jest średni koszt własny sprzedaży dla każdej linii produktów?
+<p>5. Jaki jest średni koszt własny sprzedaży dla każdej linii produktów?</p>
                     
 SELECT Prod_line,
        ROUND(AVG(cogs)::NUMERIC,2) AS sredni_koszt
@@ -226,7 +226,8 @@ GROUP BY Prod_line
                 <div class="code-box">
                 <div class="code-header" onclick="toggleCode(this)">▶ Kod</div>
                 <pre class="code-content">
----  Jaki procent klientów stanowią kobiety i mężczyźni w każdym oddziale?
+<p>1.  Jaki procent klientów stanowią kobiety i mężczyźni w każdym oddziale?</p>
+                    
 WITH cte as (
     SELECT Gender,
            COUNT(*) as ile
@@ -237,7 +238,8 @@ SELECT Gender,
        ile,
        (ile * 100)/ SUM(ile) OVER ()
 from cte
---- Jak różnią się średnie wydatki klientów w zależności od ich typu (Customer_type)?
+                    
+<p>2. Jak różnią się średnie wydatki klientów w zależności od ich typu (Customer_type)?</p>
 
 with cte AS (
 SELECT Custtype,
@@ -250,7 +252,8 @@ SELECT Custtype,
        srednia / SUM(srednia) OVER() as procent
 FROM cte
 
---- Czy istnieje zależność między płcią klienta a wybraną metodą płatności?
+<p>3. Czy istnieje zależność między płcią klienta a wybraną metodą płatności?</p>
+                    
 WITH cte as (
     SELECT Gender,
            Payment,
