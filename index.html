@@ -222,12 +222,48 @@ GROUP BY Prod_line
             </div>
 
                 <div class="code-box">
-                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <div class="code-header" onclick="toggleCode(this)">▶ Analiza klientów</div>
+                <p><strong>Zastosowano:</strong> Funkcje okienkowe, CTE, GROUP BY, podstawowe funkcje agregujące</p>
                 <pre class="code-content">
-SELECT product_name, SUM(quantity) AS total_sold 
-FROM sales 
-GROUP BY product_name 
-ORDER BY total_sold DESC;
+---  Jaki procent klientów stanowią kobiety i mężczyźni w każdym oddziale?
+WITH cte as (
+    SELECT Gender,
+           COUNT(*) as ile
+           FROM main
+    GROUP BY Gender
+)
+SELECT Gender,
+       ile,
+       (ile * 100)/ SUM(ile) OVER ()
+from cte
+--- Jak różnią się średnie wydatki klientów w zależności od ich typu (Customer_type)?
+
+with cte AS (
+SELECT Custtype,
+       avg(total) AS srednia
+FROM main
+GROUP BY Custtype
+)
+SELECT Custtype,
+       srednia,
+       srednia / SUM(srednia) OVER() as procent
+FROM cte
+
+--- Czy istnieje zależność między płcią klienta a wybraną metodą płatności?
+WITH cte as (
+    SELECT Gender,
+           Payment,
+           count(Payment) AS ile
+    FROM main
+    GROUP BY Gender, Payment
+)
+SELECT Gender,
+       Payment,
+       ile,
+       ile / SUM(ile) OVER() AS obie,
+       ile / SUM(ile) OVER(partition by Gender) AS jedna_plec
+FROM cte
+
                 </pre>
                 </div>
 
