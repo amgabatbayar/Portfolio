@@ -270,14 +270,40 @@ FROM cte
 
                 </pre>
                 </div>
-
+                <h2>Tworzenie tabeli / widoku</h2>
+                <p><strong>Zastosowano:</strong> Funkcje okienkowe, CTE, GROUP BY, podstawowe funkcje agregujące</p>
                 <div class="code-box">
-                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+                <div class="code-header" onclick="toggleCode(this)">▶ Kod</div>
                 <pre class="code-content">
-SELECT product_name, SUM(quantity) AS total_sold 
-FROM sales 
-GROUP BY product_name 
-ORDER BY total_sold DESC;
+                    <p>1. Stworzenie tabeli best_selling_products, w której będą przechowywane informacje o najlepiej sprzedających się produktach każdego miesiąca.</p>
+with cte AS (SELECT Prod_line,
+                    EXTRACT(MONTH FROM trans_date) AS miesiac
+             FROM main)
+SELECT Prod_line,
+       miesiac,
+       count(*) ile,
+       RANK() over (PARTITION BY miesiac ORDER BY count(*) desc)
+FROM cte
+GROUP BY Prod_line, miesiac
+
+                <p>2. Stworzenie tabeli customer_segments, w której klienci zostaną przypisani do segmentów na podstawie średnich wydatków (np. "Low Spenders", "Mid Spenders", "High Spenders")</p>
+                    CREATE OR REPLACE VIEW customer_segments AS
+WITH cte AS (
+    SELECT
+        AVG(Total) AS srednia
+    FROM main
+)
+SELECT
+    Inv_id,
+    Total,
+    CASE
+        WHEN Total >= 0.66 * (SELECT srednia FROM cte) THEN 'High Spender'
+        WHEN Total BETWEEN 0.33 * (SELECT srednia FROM cte)
+                      AND 0.66 * (SELECT srednia FROM cte)
+        THEN 'Mid Spender'
+        ELSE 'Low Spender'
+    END AS segment
+FROM main;
                 </pre>
                 </div>
 
