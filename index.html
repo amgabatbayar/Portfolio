@@ -308,9 +308,10 @@ FROM main;
                 </div>
             <h2>Projekt 2: Chinook </h2>
             <p><strong>Link:</strong> https://github.com/lerocha/chinook-database</p>
-                <div class="code-box">
-            <h2>Łączenie tabel</h2>
+                <h2>Łączenie tabel</h2>
                 <p><strong>Zastosowano:</strong> Funkcje okienkowe, CTE, GROUP BY, podstawowe funkcje agregujące</p>
+                <div class="code-box">
+
                 <div class="code-header" onclick="toggleCode(this)">▶ Kod</div>
                 <pre class="code-content">
                     <p>1. Znajdź klientów oraz ich ostatnią fakturę, ale tylko najpóźniejszą fakturę dla każdego klienta.</p>
@@ -329,33 +330,70 @@ FROM customer c
 JOIN cte USING(customer_id)  
 JOIN invoice i ON i.customer_id = c.customer_id  
 AND cte.data_fakt = i.invoice_date
-                </pre>
-                </div>
 
-                <div class="code-box">
-                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
-                <pre class="code-content">
-SELECT product_name, SUM(quantity) AS total_sold 
-FROM sales 
-GROUP BY product_name 
-ORDER BY total_sold DESC;
+                <p>Znajdź albumy, które mają więcej niż 10 utworów oraz liczbę utworów na albumi</p>
+WITH cte AS(  
+        SELECT album_id,  
+       count(*) ile,  
+       title  
+FROM album a  
+JOIN track t  
+USING(album_id)  
+GROUP BY album_id  
+)  
+SELECT c.album_id, c.ile, c.title  
+FROM cte c  
+WHERE c.ile > 10  
+ORDER BY ile DESC
+                    <p>Znajdź artystów, którzy nie mają przypisanych albumów</p>
+SELECT *  
+FROM artist ar  
+LEFT JOIN album al  
+USING(artist_id)  
+WHERE al.album_id IS NULL
+
+                    <p>Znajdź klientów, którzy nigdy nie kupili utworów w gatunku 'Rock', ale kupili inne utwory</p>
+SELECT c.customer_id, c.first_name, c.last_name  
+FROM customer c  
+JOIN invoice i USING(customer_id)  
+WHERE c.customer_id NOT IN (  
+
+    SELECT DISTINCT i.customer_id  
+    FROM invoice i  
+    JOIN invoice_line il ON i.invoice_id = il.invoice_id  
+    JOIN track t ON il.track_id = t.track_id  
+    JOIN genre g ON t.genre_id = g.genre_id  
+    WHERE g.name = 'Rock'  
+)  
+AND c.customer_id IN (  
+ 
+    SELECT DISTINCT i.customer_id  
+    FROM invoice i  
+    JOIN invoice_line il ON i.invoice_id = il.invoice_id  
+    JOIN track t ON il.track_id = t.track_id  
+    JOIN genre g ON t.genre_id = g.genre_id  
+    WHERE g.name != 'Rock'  
+);
+
+                    <p>Znajdź najlepszych klientów, następnie posortuj po łącznej kwocie wydanej na faktury</p>
+WITH cte AS(  
+SELECT c.customer_id,  
+       c.first_name,  
+       c.last_name,  
+       SUM(i.total) suma  
+FROM customer c  
+JOIN invoice i  
+ON C.customer_id = I.customer_id  
+GROUP BY c.customer_id, c.first_name, c.last_name  
+)  
+SELECT customer_id,  
+       first_name,  
+       last_name,  
+       suma,  
+       row_number() over (ORDER BY suma desc) as miejsce  
+FROM cte
                 </pre>
                 </div>
-            <h3>Wyniki:</h3>
-            <table class="result-table">
-                <tr>
-                    <th>Produkt</th>
-                    <th>Sprzedana Ilość</th>
-                </tr>
-                <tr>
-                    <td>Telefon</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>Laptop</td>
-                    <td>95</td>
-                </tr>
-            </table>
         </div>
     </div>
     
