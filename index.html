@@ -332,7 +332,7 @@ JOIN cte USING(customer_id)
 JOIN invoice i ON i.customer_id = c.customer_id  
 AND cte.data_fakt = i.invoice_date
 
-                <p>Znajdź albumy, które mają więcej niż 10 utworów oraz liczbę utworów na albumi</p>
+                <p>2. Znajdź albumy, które mają więcej niż 10 utworów oraz liczbę utworów na albumi</p>
 WITH cte AS(  
         SELECT album_id,  
        count(*) ile,  
@@ -346,14 +346,14 @@ SELECT c.album_id, c.ile, c.title
 FROM cte c  
 WHERE c.ile > 10  
 ORDER BY ile DESC
-                    <p>Znajdź artystów, którzy nie mają przypisanych albumów</p>
+                    <p>3. Znajdź artystów, którzy nie mają przypisanych albumów</p>
 SELECT *  
 FROM artist ar  
 LEFT JOIN album al  
 USING(artist_id)  
 WHERE al.album_id IS NULL
 
-                    <p>Znajdź klientów, którzy nigdy nie kupili utworów w gatunku 'Rock', ale kupili inne utwory</p>
+                    <p>4. Znajdź klientów, którzy nigdy nie kupili utworów w gatunku 'Rock', ale kupili inne utwory</p>
 SELECT c.customer_id, c.first_name, c.last_name  
 FROM customer c  
 JOIN invoice i USING(customer_id)  
@@ -376,7 +376,7 @@ AND c.customer_id IN (
     WHERE g.name != 'Rock'  
 );
 
-                    <p>Znajdź najlepszych klientów, następnie posortuj po łącznej kwocie wydanej na faktury</p>
+                    <p>5. Znajdź najlepszych klientów, następnie posortuj po łącznej kwocie wydanej na faktury</p>
 WITH cte AS(  
 SELECT c.customer_id,  
        c.first_name,  
