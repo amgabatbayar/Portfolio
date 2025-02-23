@@ -306,14 +306,29 @@ SELECT
 FROM main;
                 </pre>
                 </div>
-
+            <h2>Projekt 2: Chinook </h2>
+            <p><strong>Link:</strong> https://github.com/lerocha/chinook-database</p>
                 <div class="code-box">
-                <div class="code-header" onclick="toggleCode(this)">▶ Wczytanie danych</div>
+            <h2>Łączenie tabel</h2>
+                <p><strong>Zastosowano:</strong> Funkcje okienkowe, CTE, GROUP BY, podstawowe funkcje agregujące</p>
+                <div class="code-header" onclick="toggleCode(this)">▶ Kod</div>
                 <pre class="code-content">
-SELECT product_name, SUM(quantity) AS total_sold 
-FROM sales 
-GROUP BY product_name 
-ORDER BY total_sold DESC;
+                    <p>1. Znajdź klientów oraz ich ostatnią fakturę, ale tylko najpóźniejszą fakturę dla każdego klienta.</p>
+WITH cte as (  
+    SELECT customer_id,  
+           max(invoice_date) AS data_fakt  
+FROM invoice  
+GROUP BY customer_id  
+)  
+SELECT c.customer_id,  
+       c.last_name,  
+       c.first_name,  
+       cte.data_fakt,  
+       i.invoice_id  
+FROM customer c  
+JOIN cte USING(customer_id)  
+JOIN invoice i ON i.customer_id = c.customer_id  
+AND cte.data_fakt = i.invoice_date
                 </pre>
                 </div>
 
